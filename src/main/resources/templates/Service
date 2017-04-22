@@ -1,0 +1,128 @@
+
+
+package {PACKAGE_NAME} ;
+
+import javax.ws.rs.GET ;
+import javax.inject.Inject ;
+import javax.ws.rs.Produces ;
+import javax.ws.rs.QueryParam ;
+import javax.ws.rs.HeaderParam ;
+import javax.ws.rs.core.UriInfo ;
+import javax.ws.rs.core.Context ;
+import javax.ws.rs.core.Response ;
+import javax.annotation.PostConstruct ;
+import com.rac021.jax.api.qualifiers.security.Policy ;
+import com.rac021.jax.api.qualifiers.security.Public ;
+import com.rac021.jax.api.qualifiers.ServiceRegistry ;
+import com.rac021.jax.api.qualifiers.ResourceRegistry ;
+import com.rac021.jax.api.streamers.StreamerOutputXml ;
+import com.rac021.jax.api.qualifiers.security.Secured ;
+import com.rac021.jax.api.streamers.StreamerOutputJson ;
+import com.rac021.jax.api.streamers.StreamerOutputXmlEncrypted ;
+import com.rac021.jax.api.streamers.StreamerOutputJsonEncrypted ;
+
+/**
+ *
+ * @author R.Yahioaui
+ */
+
+@ServiceRegistry("{SERVICE_CODE}")
+{SECURITY}
+public class {SERVICE_NAME}      {
+
+    @ResourceRegistry("{RESOURCE_CODE}")
+    private Resource {RESOURCE_NAME}      ;
+
+    @Inject
+    StreamerOutputXml streamerOutputXml   ;
+    
+    @Inject
+    StreamerOutputJson streamerOutputJson ;
+    
+    @Inject
+    StreamerOutputXmlEncrypted streamerOutputXmlEncrypted ;
+    
+    @Inject
+    StreamerOutputJsonEncrypted streamerOutputJsonEncrypted ;
+   
+    @PostConstruct
+    public void init() {
+    }
+
+    public {SERVICE_NAME}() {
+    }
+   
+    @GET
+    @Produces("xml/plain")
+    public Response getResourceASXml( @HeaderParam("sort") String filterdIndex, @Context UriInfo uriInfo , {SQL_PARAMS} ) {    
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator();
+        * defaultStreamerConfigurator.setNbrCores(2);
+        * defaultStreamerConfigurator.setRatio(4);
+        * defaultStreamerConfigurator.setRecorderLenght(16000);
+        * streamingOutputXml.setStreamerConfigurator(defaultStreamerConfigurator);
+        */
+
+        System.out.println(" G-JAX - Process : getResourceXml ... ") ; 
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputXml.wrapResource({RESOURCE_NAME} , {DTO_CLASS} , filterdIndex, uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+    @GET
+    @Produces("xml/encrypted")
+    public Response getResourceASEnctyptedXml( @HeaderParam("sort") String filterdIndex, @Context UriInfo uriInfo , {SQL_PARAMS} ) {    
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator();
+        * defaultStreamerConfigurator.setNbrCores(2);
+        * defaultStreamerConfigurator.setRatio(4);
+        * defaultStreamerConfigurator.setRecorderLenght(16000);
+        * streamingOutputXml.setStreamerConfigurator(defaultStreamerConfigurator);
+        */
+            
+         return Response.status(Response.Status.OK)
+                        .entity(streamerOutputXmlEncrypted.wrapResource({RESOURCE_NAME}, {DTO_CLASS} , filterdIndex, uriInfo.getQueryParameters() ))
+                        .build() ;
+    }
+
+    @GET
+    @Produces("json/plain")
+    public Response getResourceASJson( @HeaderParam("sort") String filterdIndex, @Context UriInfo uriInfo, {SQL_PARAMS} ) {
+          
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator();
+        * defaultStreamerConfigurator.setNbrCores(2);
+        * defaultStreamerConfigurator.setRatio(4);
+        * defaultStreamerConfigurator.setRecorderLenght(16000);
+        * streamingOutputXml.setStreamerConfigurator(defaultStreamerConfigurator);
+        */
+  
+        return Response.status(Response.Status.OK)
+                       .entity(streamerOutputJson.wrapResource({RESOURCE_NAME}, {DTO_CLASS} , filterdIndex, uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+    
+    @GET
+    @Produces("json/encrypted")
+    public Response getResourceASEncryptedJson( @HeaderParam("sort") String filterdIndex, @Context UriInfo uriInfo, {SQL_PARAMS}) {
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator();
+        * defaultStreamerConfigurator.setNbrCores(2);
+        * defaultStreamerConfigurator.setRatio(4);
+        * defaultStreamerConfigurator.setRecorderLenght(16000);
+        * streamingOutputXml.setStreamerConfigurator(defaultStreamerConfigurator);
+        */
+  
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputJsonEncrypted.wrapResource({RESOURCE_NAME}, {DTO_CLASS} , filterdIndex, uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+}
